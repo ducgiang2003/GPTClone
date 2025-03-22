@@ -13,11 +13,12 @@ const DashBoardLayout = ({children}:{
                     <Sidebar/>
                 </div>
             </div>
+
            <main className={"md:pl-72"}>
                <Navbar/>
                {children}
-               <h1>This is a content</h1>
            </main>
+
         </div>
     )
 }

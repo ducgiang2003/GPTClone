@@ -13,19 +13,20 @@ import {
     Video,
     MessageCircleMore, Settings
 } from "lucide-react";
+import { usePathname } from "next/navigation";
 const montserrat = Montserrat({
     weight : "600",
     subsets:["latin"]
 });
 const routes = [
     {
-        label:"Dasboard",
+        label:"Dashboard",
         href:"/dashboard",
         icon:LayoutDashboard,
         color:"text-sky-500"
     },
     {
-        label:"Convertation",
+        label:"Conversation",
         href:"/conversation",
         icon:Baby,
         color:"text-green-400"
@@ -64,6 +65,8 @@ const routes = [
 
 ]
 const Sidebar = () => {
+    const pathname = usePathname();
+
     return (
         <div className={"space-y-4 py-4 flex flex-col h-full" +
             " bg-[#111827] text-white"}>
@@ -81,8 +84,12 @@ const Sidebar = () => {
             <div className={"space-y-1"}>
                 {routes.map((route)=>(
                     <Link href={route.href} key={route.href}
-                           className={"text-sm group flex p-3 w-full justify-start font-medium " +
-                               "hover:text-white hover:bg-white/10 transition cursor-pointer"}>
+                           className={cn("text-sm group flex p-3 w-full justify-start font-medium " +
+                               "hover:text-white hover:bg-white/10 transition cursor-pointer rounded-xl",
+                                // This will blur item in dashboard if you are not where the path
+                                pathname===route.href ? "text-white bg-white/10 " : "text-zinc-600"
+
+                           )}>
                         <div className={"flex items-center flex-1"}>
                             <route.icon className={cn("h-5 w-5 mr-2",route.color)} />
                             {route.label}

@@ -2,13 +2,18 @@
 import {Button} from "@/components/ui/button";
 import {Menu} from "lucide-react";
 import {
-    Sheet, SheetClose,
-    SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle,
+    Sheet,
+    SheetContent, SheetTitle,
     SheetTrigger
 } from "@/components/ui/sheet";
 import Sidebar from '@/components/sidebar'
 import {VisuallyHidden} from "@radix-ui/react-visually-hidden";
+import {useEffect, useState} from "react";
 const MobileSideBar = () =>{
+    const [isMounted,setIsMounted] = useState(false);
+    useEffect(()=>{
+        setIsMounted(true);
+    },[])
     return(
         <Sheet>
             <SheetTrigger asChild>
