@@ -55,7 +55,10 @@ const DashBoard =() => {
                     <Card
                         onClick={() => router.push(tool.href)}
                         key={tool.href}
-                        className="w-full p-4 gap-4 border-black/5 flex items-center justify-between hover:shadow-md transition cursor-pointer"
+                        className="w-full p-4 gap-4 border-black/5 
+                        flex items-center
+                         justify-between hover:shadow-md
+                          transition cursor-pointer"
                     >
                         <div className="flex items-center gap-x-4">
                             <div className={cn('p-2 w0fit rounded-md', tool.bgColor)}>

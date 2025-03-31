@@ -2,13 +2,31 @@
 import * as z from "zod";
 import Heading from "@/components/heading"
 import {Baby} from "lucide-react";
-import {Form, FormProvider, useForm} from "react-hook-form";
+import { FormProvider, useForm} from "react-hook-form";
 import formSchema from "@/app/(dashboard)/(routes)/conversation/constants";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {FormControl, FormField, FormItem} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
+import axios from "axios";
+import {useRouter} from "next/navigation";
+import { useState } from "react";
+import { Empty } from "@/components/empty";
+import { Loader } from "@/components/loader";
+import { cn } from "@/lib/utils";
+import { UserAvatar } from "@/components/user-avatar";
+import { BotAvatar } from "@/components/bot-avatar";
+
+
+interface GeminiMessage {
+    parts: { text: string }[];
+}
 const ConversationPage = () =>{
+
+
+    const [messages, setMessages] = useState<GeminiMessage[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter();
     const form = useForm({
         resolver:zodResolver(formSchema),
         defaultValues: {
@@ -16,9 +34,39 @@ const ConversationPage = () =>{
         }
     });
     //IsLoading(default form)
-    const isLoading = form.formState.isLoading;
+
     const onSubmit = async (values:z.infer<typeof formSchema>) => {
-        console.log("gia tri khi nhap la ",values)
+        try {
+            form.clearErrors();
+            setIsSubmitting(true);
+            const userMessage: GeminiMessage = {
+                parts: [{ text: values.prompts }]
+            };
+            const newMessages = [...messages, userMessage];
+
+            const response = await axios.post("/api/conversation", {
+                messages: newMessages
+            });
+
+            const aiMessage: GeminiMessage = {
+                parts: [{ text: response.data.messages }]
+            };
+
+            setMessages((current) => [...current, userMessage, aiMessage]);
+
+            form.reset();
+
+        } catch (error) {
+           if (typeof error === "object" && error !== null && "message" in error && "code" in error) {
+                       const customError = error as MyCustomError;
+                       return console.error(`Error: ${customError.message}`, { status: customError.code });
+                   } else {
+                    return console.error("Error: Unknown error occurred");
+                   }
+        } finally {
+            setIsSubmitting(false);
+            router.refresh();
+        }
     };
 
     return (
@@ -33,9 +81,15 @@ const ConversationPage = () =>{
             <div className={"px-4 lg:px-8"}>
                 <div>
                     <FormProvider {...form}>
-                    <Form >
+
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
+                            onKeyDown={(e) =>{
+                                if(e.key==='Enter' && !e.shiftKey){
+                                    e.preventDefault();
+                                    form.handleSubmit(onSubmit)();
+                                }
+                            }}
                             className={"w-full border rounded-lg " +
                                 "p-4 px-3 md:px-6 focus-within:shadow-sm " +
                                 "grid grid-cols-12 gap-2"}
@@ -49,22 +103,50 @@ const ConversationPage = () =>{
                                         // focus-visible make effect when type or not
                                         "focus-visible:ring-0 " +
                                         "focus-visible:ring-transparent"}
-                                           disabled={isLoading}
+                                           disabled={isSubmitting}
                                            placeholder={"How can I help you ?"}
                                            {...field} />
                                 </FormControl>
                                 </FormItem>
                             )}>
                             </FormField>
-                            <Button className={"col-span-12 lg:col-span-2 w-full"}>
+                            <Button className={"col-span-12 lg:col-span-2 w-full"}
+                            disabled={isSubmitting}>
                                 Generate
                             </Button>
                         </form>
-                    </Form>
                     </FormProvider>
                 </div>
-                <div>
-                    Message Content
+                <div className="space-y-4 mt-4">
+                    {isSubmitting &&(
+                        <div className="p-8 rounded-lg w-full flex items-center
+                        justify-center bg-muted">
+                            <Loader/>
+                        </div>
+                    )}
+                    {messages.length === 0 && !isSubmitting && (
+                        <div>
+                           <Empty label="No conversation started"/>
+                        </div>
+                    )}
+                    <div className="flex flex-col gap-y-4">
+                    {messages.map((message, index) => (
+                            <div
+                             key={index}
+                             className={cn(
+                                "p-8 w-full rounded-lg flex items-start gap-x-8 ",
+                                index%2 === 0 ?"bg-white border border-black/10" :
+                                 "bg-muted",
+                                )}>
+                                    {index %2 === 0 ? <UserAvatar/> : <BotAvatar/>}
+
+                                <p className="text-sm "> 
+                                    {message.parts[0].text}
+                                </p>
+                               
+                            </div>
+                            ))}
+                    </div>
                 </div>
             </div>
         </div>
