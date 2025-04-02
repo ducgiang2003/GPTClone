@@ -39,6 +39,7 @@ const ConversationPage = () =>{
         try {
             form.clearErrors();
             setIsSubmitting(true);
+            //User messages from client
             const userMessage: GeminiMessage = {
                 parts: [{ text: values.prompts }]
             };

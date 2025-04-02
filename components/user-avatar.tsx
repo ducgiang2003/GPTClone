@@ -3,7 +3,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export const UserAvatar = () => {
     const { user } = useUser();
-    console.log("User data", user);
 
     return (
         <Avatar className="h-8 w-8">
