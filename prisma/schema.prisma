@@ -1,0 +1,24 @@
+// prisma/schema.prisma
+//use prisma on client to query local database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// This is your Prisma schema file.
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//cuid is a function that generates a unique id
+
+model UserAPILimit {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  count     Int      @default(0)
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  timeZone  String?  @default("UTC")
+  dateReset DateTime @default(now())
+}
