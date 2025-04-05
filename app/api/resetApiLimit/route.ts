@@ -1,8 +1,8 @@
 import prismadb from "@/lib/prismadb"; // Đảm bảo bạn đã cấu hình Prisma đúng
 import { currentUser } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export default async function POST(req: NextRequest) {
+export async function POST() {
   try {
     const user = await currentUser();
 
@@ -13,6 +13,36 @@ export default async function POST(req: NextRequest) {
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 500 });
     }
+
+    const userAPiLimit = await prismadb.userAPILimit.upsert({
+      where: {
+        userId: userId,
+      },
+      update: {},
+      create: {
+        userId: userId,
+        count: 0,
+        dateReset: new Date(),
+      },
+    });
+
+    const lastResetDate = new Date(userAPiLimit.dateReset);
+
+    const today = new Date();
+
+    if (lastResetDate.toDateString() !== today.toDateString()) {
+      await prismadb.userAPILimit.update({
+        where: {
+          userId,
+        },
+        data: {
+          count: 0,
+          dateReset: today,
+        },
+      });
+    }
+
+    return NextResponse.json({ success: true });
   } catch (error) {
     if (
       typeof error === "object" &&

@@ -16,7 +16,9 @@ import {
 import { usePathname } from "next/navigation";
 import { FreeCounter } from "./freecounter";
 import { useEffect } from "react";
-import { saveTimeZone } from "@/lib/getTimeZone";
+import { resetApiLimit, saveTimeZone } from "@/lib/configTimeZone";
+import { useDispatch } from "react-redux";
+import { setApiLimitCount } from "@/lib/slices/countSlice";
 const montserrat = Montserrat({
   weight: "600",
   subsets: ["latin"],
@@ -70,18 +72,21 @@ interface SidebarProps {
 }
 const Sidebar = ({ apiLimitCounts = 0 }: SidebarProps) => {
   const pathname = usePathname();
+
   useEffect(() => {
     const fetchTimeZone = async () => {
       try {
         await saveTimeZone();
-
         console.log("Save time Zone success");
+        await resetApiLimit();
+        console.log("Reset API limit success");
       } catch (error) {
         console.error("Failed to save time zone:", error);
       }
     };
     fetchTimeZone();
   }, []);
+  // This will set apiLimitCounts to redux store
 
   return (
     <div

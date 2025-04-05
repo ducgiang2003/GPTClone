@@ -10,3 +10,14 @@ export const saveTimeZone = async () => {
     throw error;
   }
 };
+
+//Reset API limit in next day
+export const resetApiLimit = async () => {
+  try {
+    const res = await axios.post("/api/resetApiLimit");
+    return res.data;
+  } catch (error) {
+    console.error("Lỗi khi reset timezone:", error);
+    throw error;
+  }
+};
