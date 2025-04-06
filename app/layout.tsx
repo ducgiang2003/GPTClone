@@ -10,6 +10,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import { ModalProvider } from "@/components/modal-provider";
 const signInUrl = process.env.CLERK_SIGN_IN_FORCE_REDIRECT_URL;
 
 const geistSans = Geist({
@@ -51,6 +52,7 @@ export default function RootLayout({
               <UserButton />
             </SignedIn>
           </header>
+          <ModalProvider />
           {children}
         </body>
       </html>

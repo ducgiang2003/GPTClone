@@ -4,74 +4,22 @@ import Image from "next/image";
 import { Montserrat } from "next/font/google";
 //cn will use for customize by wrap css like cn(css)
 import { cn } from "@/lib/utils";
-import {
-  LayoutDashboard,
-  Baby,
-  Drum,
-  BookImage,
-  Video,
-  MessageCircleMore,
-  Settings,
-} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { FreeCounter } from "./freecounter";
 import { useEffect } from "react";
 import { resetApiLimit, saveTimeZone } from "@/lib/configTimeZone";
-import { useDispatch } from "react-redux";
-import { setApiLimitCount } from "@/lib/slices/countSlice";
+import { useRoutesStore } from "@/hooks/use-routes-store";
+
 const montserrat = Montserrat({
   weight: "600",
   subsets: ["latin"],
 });
-const routes = [
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-    color: "text-sky-500",
-  },
-  {
-    label: "Conversation",
-    href: "/conversation",
-    icon: Baby,
-    color: "text-green-400",
-  },
-  {
-    label: "Image generation",
-    href: "/image",
-    icon: BookImage,
-    color: "text-yellow-300",
-  },
-  {
-    label: "Video generation",
-    href: "/video",
-    icon: Video,
-    color: "text-orange-600",
-  },
-  {
-    label: "Music generation",
-    href: "/music",
-    icon: Drum,
-    color: "text-rose-600",
-  },
-  {
-    label: "Code generation",
-    href: "/code",
-    icon: MessageCircleMore,
-    color: "text-fuchsia-700",
-  },
-  {
-    label: "Settings",
-    href: "/settings",
-    icon: Settings,
-    color: "text-zinc-400",
-  },
-];
 interface SidebarProps {
   apiLimitCounts: number;
 }
 const Sidebar = ({ apiLimitCounts = 0 }: SidebarProps) => {
   const pathname = usePathname();
+  const routes = useRoutesStore((state) => state.routes);
 
   useEffect(() => {
     const fetchTimeZone = async () => {
