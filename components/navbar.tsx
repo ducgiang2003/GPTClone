@@ -1,6 +1,6 @@
 import MobileSideBar from "@/components/mobile-sidebar";
 
-const Navbar = () => {
+const Navbar = async () => {
   return (
     <div className={"flex items-center pt-4"}>
       <MobileSideBar />

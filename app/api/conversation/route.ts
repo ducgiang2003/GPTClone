@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("Received messages:", JSON.stringify(body.messages, null, 2));
     //Check API limit
     const freeTrial = await checkApiLimit();
 
@@ -38,12 +37,10 @@ export async function POST(req: NextRequest) {
         text: message.parts[0].text,
       })
     );
-    console.log("Gemini parts:", JSON.stringify(geminiParts, null, 2));
     //Payload là phần dữ liệu gửi lên cho Gemini
     const geminiPayload = {
       contents: [{ parts: geminiParts }] as Content[],
     };
-    console.log("Gemini payload:", JSON.stringify(geminiPayload, null, 2));
 
     // Gọi API Gemini
     const result = await model.generateContent(geminiPayload);
@@ -52,8 +49,8 @@ export async function POST(req: NextRequest) {
     if (!result) {
       return new NextResponse("Failed to generate content.", { status: 500 });
     }
-
-    await increaseApiLimit(); // Tăng giới hạn API sau khi thành công
+    //Increase API limit after success in API
+    await increaseApiLimit();
 
     // Trả về kết quả dưới dạng JSON
     const response = await result.response;

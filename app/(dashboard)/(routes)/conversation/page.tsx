@@ -1,26 +1,29 @@
 "use client";
 import * as z from "zod";
-import Heading from "@/components/heading";
-import { Baby } from "lucide-react";
+import axios from "axios";
 import { FormProvider, useForm } from "react-hook-form";
 import formSchema from "@/app/(dashboard)/(routes)/conversation/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import Heading from "@/components/heading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
-import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { Baby } from "lucide-react";
+import { usePromodal } from "@/hooks/use-pro-modal";
+import { FormattedText } from "@/components/formated-text";
 
 interface GeminiMessage {
   parts: { text: string }[];
 }
 const ConversationPage = () => {
+  const proModal = usePromodal();
   const [messages, setMessages] = useState<GeminiMessage[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -47,7 +50,7 @@ const ConversationPage = () => {
       const response = await axios.post("/api/conversation", {
         messages: newMessages,
       });
-
+      //Message from Gemini
       const aiMessage: GeminiMessage = {
         parts: [{ text: response.data.messages }],
       };
@@ -56,18 +59,10 @@ const ConversationPage = () => {
 
       form.reset();
     } catch (error) {
-      if (
-        typeof error === "object" &&
-        error !== null &&
-        "message" in error &&
-        "code" in error
-      ) {
-        const customError = error as MyCustomError;
-        return console.error(`Error: ${customError.message}`, {
-          status: customError.code,
-        });
-      } else {
-        return console.error("Error: Unknown error occurred");
+      if (axios.isAxiosError(error) && error.response?.status === 403) {
+        console.log("Hết giới hạn sử dụng API");
+        //Todo-modal open
+        proModal.onOpen();
       }
     } finally {
       setIsSubmitting(false);
@@ -158,7 +153,7 @@ const ConversationPage = () => {
               >
                 {index % 2 === 0 ? <UserAvatar /> : <BotAvatar />}
 
-                <p className="text-sm ">{message.parts[0].text}</p>
+                <FormattedText content={message.parts[0].text} />
               </div>
             ))}
           </div>

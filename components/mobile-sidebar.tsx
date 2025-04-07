@@ -1,4 +1,6 @@
 "use client";
+import { useApiLimit } from "@/hooks/api-limit-counts";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import {
@@ -9,13 +11,8 @@ import {
 } from "@/components/ui/sheet";
 import Sidebar from "@/components/sidebar";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { useEffect, useState } from "react";
-
 const MobileSideBar = () => {
-  //   const apiLimitCounts = useSelector(
-  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //     (state: any) => state.countSlice.apiLimitCounts
-  //   );
+  const apiLimitCounts = useApiLimit((state) => state.apiLimitCounts);
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
@@ -31,7 +28,7 @@ const MobileSideBar = () => {
         <VisuallyHidden>
           <SheetTitle className={"hidden"}></SheetTitle>
         </VisuallyHidden>
-        <Sidebar />
+        <Sidebar apiLimitCounts={apiLimitCounts} />
       </SheetContent>
     </Sheet>
   );

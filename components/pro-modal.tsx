@@ -1,13 +1,20 @@
 "use client";
 
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
-import { Dialog, DialogContent, DialogHeader } from "./ui/dialog";
 import { usePromodal } from "@/hooks/use-pro-modal";
-import { Badge } from "./ui/badge";
 import { useRoutesStore } from "@/hooks/use-routes-store";
-import { Card } from "./ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { Zap } from "lucide-react";
 
 export const ProModal = () => {
   const tools = useRoutesStore((state) => state.routes);
@@ -56,6 +63,12 @@ export const ProModal = () => {
             </div>
           </DialogDescription>
         </DialogHeader>
+        <DialogFooter>
+          <Button className=" font-bold w-full " variant={"premium"} size="lg">
+            Upgrade for use more unlimited counts
+            <Zap className="w-4 h-4 ml-2 fill-white" />
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
