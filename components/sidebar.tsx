@@ -6,7 +6,7 @@ import { Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { FreeCounter } from "./freecounter";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { resetApiLimit, saveTimeZone } from "@/lib/configTimeZone";
 import { useRoutesStore } from "@/hooks/use-routes-store";
 import { useApiLimit } from "@/hooks/api-limit-counts";
@@ -17,12 +17,13 @@ const montserrat = Montserrat({
 });
 interface SidebarProps {
   apiLimitCounts: number;
+  isPro: false;
 }
-const Sidebar = ({ apiLimitCounts = 0 }: SidebarProps) => {
+const Sidebar = ({ apiLimitCounts = 0, isPro = false }: SidebarProps) => {
   const pathname = usePathname();
   const routes = useRoutesStore((state) => state.routes);
   const setApiLimitCounts = useApiLimit((state) => state.setApiLimitCount);
-  const isFirstRender = useRef(true);
+
   useEffect(() => {
     const fetchTimeZone = async () => {
       try {
@@ -78,7 +79,7 @@ const Sidebar = ({ apiLimitCounts = 0 }: SidebarProps) => {
           ))}
         </div>
       </div>
-      <FreeCounter apiLimitCounts={apiLimitCounts} />
+      <FreeCounter apiLimitCounts={apiLimitCounts} isPro={isPro} />
     </div>
   );
 };

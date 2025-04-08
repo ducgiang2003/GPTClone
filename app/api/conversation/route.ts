@@ -2,6 +2,7 @@ import { getAuth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { Content, GoogleGenerativeAI } from "@google/generative-ai";
 import { increaseApiLimit, checkApiLimit } from "@/lib/api-limit";
+import { checkSubscription } from "@/lib/subsciption";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -26,8 +27,9 @@ export async function POST(req: NextRequest) {
 
     //Check API limit
     const freeTrial = await checkApiLimit();
+    const isPro = await checkSubscription();
 
-    if (!freeTrial) {
+    if (!freeTrial || !isPro) {
       return new NextResponse("Hết giới hạn sử dụng API ", { status: 403 });
     }
 
@@ -50,7 +52,9 @@ export async function POST(req: NextRequest) {
       return new NextResponse("Failed to generate content.", { status: 500 });
     }
     //Increase API limit after success in API
-    await increaseApiLimit();
+    if (!isPro) {
+      await increaseApiLimit();
+    }
 
     // Trả về kết quả dưới dạng JSON
     const response = await result.response;

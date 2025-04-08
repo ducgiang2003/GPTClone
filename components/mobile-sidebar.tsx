@@ -11,7 +11,11 @@ import {
 } from "@/components/ui/sheet";
 import Sidebar from "@/components/sidebar";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-const MobileSideBar = () => {
+
+interface MobileSideBarProps {
+  isPro: boolean;
+}
+const MobileSideBar = ({ isPro = false }: MobileSideBarProps) => {
   const apiLimitCounts = useApiLimit((state) => state.apiLimitCounts);
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
@@ -28,7 +32,7 @@ const MobileSideBar = () => {
         <VisuallyHidden>
           <SheetTitle className={"hidden"}></SheetTitle>
         </VisuallyHidden>
-        <Sidebar apiLimitCounts={apiLimitCounts} />
+        <Sidebar apiLimitCounts={apiLimitCounts} isPro={isPro} />
       </SheetContent>
     </Sheet>
   );
