@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const freeTrial = await checkApiLimit();
     const isPro = await checkSubscription();
 
-    if (!freeTrial || !isPro) {
+    if (!freeTrial && !isPro) {
       return new NextResponse("Hết giới hạn sử dụng API ", { status: 403 });
     }
 

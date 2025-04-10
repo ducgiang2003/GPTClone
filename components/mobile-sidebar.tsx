@@ -14,9 +14,12 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface MobileSideBarProps {
   isPro: boolean;
+  apiLimitCounts: number;
 }
-const MobileSideBar = ({ isPro = false }: MobileSideBarProps) => {
-  const apiLimitCounts = useApiLimit((state) => state.apiLimitCounts);
+const MobileSideBar = ({
+  isPro = false,
+  apiLimitCounts,
+}: MobileSideBarProps) => {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);

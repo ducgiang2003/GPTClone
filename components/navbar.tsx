@@ -1,11 +1,13 @@
 import MobileSideBar from "@/components/mobile-sidebar";
+import { getApiLimitCount } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subsciption";
 
 const Navbar = async () => {
   const isPro = await checkSubscription();
+  const apiLimitCounts = await getApiLimitCount();
   return (
     <div className={"flex items-center pt-4"}>
-      <MobileSideBar isPro={isPro} />
+      <MobileSideBar isPro={isPro} apiLimitCounts={apiLimitCounts} />
     </div>
   );
 };

@@ -11,6 +11,9 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { ModalProvider } from "@/components/modal-provider";
+
+import { ToastProvider } from "@/components/toaster-provider";
+import { CrispProvider } from "@/components/crisp-chat-box/crisp-provider";
 const signInUrl = process.env.CLERK_SIGN_IN_FORCE_REDIRECT_URL;
 
 const geistSans = Geist({
@@ -52,7 +55,9 @@ export default function RootLayout({
               <UserButton />
             </SignedIn>
           </header>
+          <CrispProvider />
           <ModalProvider />
+          <ToastProvider />
           {children}
         </body>
       </html>

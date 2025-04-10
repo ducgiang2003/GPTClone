@@ -77,12 +77,13 @@ export const ProModal = () => {
         </DialogHeader>
         <DialogFooter>
           <Button
+            disabled={loading}
             onClick={onSubscribe}
             className=" font-bold w-full "
             variant={"premium"}
             size="lg"
           >
-            Upgrade for use more unlimited counts
+            Upgrade to get unlimited counts
             <Zap className="w-4 h-4 ml-2 fill-white" />
           </Button>
         </DialogFooter>

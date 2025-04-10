@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { MAX_API_LIMITS } from "@/constants";
@@ -5,6 +7,7 @@ import { Progress } from "./ui/progress";
 import { Button } from "./ui/button";
 import { Zap } from "lucide-react";
 import { usePromodal } from "@/hooks/use-pro-modal";
+
 
 interface FreeCounterProps {
   apiLimitCounts: number;
@@ -16,6 +19,7 @@ export const FreeCounter = ({
   isPro = false,
 }: FreeCounterProps) => {
   const [mounted, setMounted] = useState(false);
+  
 
   const proModal = usePromodal();
   useEffect(() => {

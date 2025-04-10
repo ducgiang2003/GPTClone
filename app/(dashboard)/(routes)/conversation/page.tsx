@@ -14,6 +14,7 @@ import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { Baby } from "lucide-react";
 import { usePromodal } from "@/hooks/use-pro-modal";
@@ -39,6 +40,7 @@ const ConversationPage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      throw new Error("Everything is wrong ");
       form.clearErrors();
       setIsSubmitting(true);
       //User messages from client
@@ -63,6 +65,8 @@ const ConversationPage = () => {
         console.log("Hết giới hạn sử dụng API");
         //Todo-modal open
         proModal.onOpen();
+      } else {
+        toast.error("Something went wrong, please try again later.");
       }
     } finally {
       setIsSubmitting(false);

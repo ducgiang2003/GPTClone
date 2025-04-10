@@ -11,27 +11,29 @@ import {
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { BookImage, Download } from "lucide-react";
 import Image from "next/image";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { amountOptions, formSchema, resolutionOptions } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { usePromodal } from "@/hooks/use-pro-modal";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { amountOptions, formSchema, resolutionOptions } from "./constants";
-import { Card, CardFooter } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
-
+import { Card, CardFooter } from "@/components/ui/card";
+import toast from "react-hot-toast";
 interface ImageUrl {
   base64Images: string[];
   message: string;
 }
 
 const ImagePage = () => {
+  const proModal = usePromodal();
   const [images, setImages] = useState<string[]>([]);
   //Khai báo state messages để lưu trữ các tin nhắn dưới dạng các object
   const [messages, setMessages] = useState<{ text: string }[]>([]);
@@ -78,30 +80,12 @@ const ImagePage = () => {
 
       form.reset();
     } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        error.response &&
-        error.response.status === 500
-      ) {
-        console.log(
-          "Thông tin trả về từ AI lỗi: ",
-          error.response.data.message
-        );
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { text: ` ${values.prompts}` },
-          {
-            text: ` ${error.response?.data?.message ?? "An unknown error occurred"}`,
-          },
-        ]);
-      } else if (
-        typeof error === "object" &&
-        error !== null &&
-        "message" in error
-      ) {
-        console.error("Lỗi trong component imgPage: ", error.message);
+      if (axios.isAxiosError(error) && error.response?.status === 403) {
+        console.log("Hết giới hạn sử dụng API");
+        //Todo-modal open
+        proModal.onOpen();
       } else {
-        console.error("Lỗi trong component imgPage: Lỗi không xác định.");
+        toast.error("Something went wrong, please try again later.");
       }
     } finally {
       setIsSubmitting(false);

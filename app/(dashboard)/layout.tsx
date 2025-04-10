@@ -2,12 +2,14 @@ import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import { getApiLimitCount } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subsciption";
+import { TimezoneSaver } from "@/components/time-zone-saver";
 const DashBoardLayout = async ({ children }: { children: React.ReactNode }) => {
   const apiLimitCounts = await getApiLimitCount();
   const isPro = await checkSubscription();
 
   return (
     <div className={"h-full relative"}>
+      <TimezoneSaver />
       <div
         className={
           "hidden h-full md:flex md:flex-col " +
