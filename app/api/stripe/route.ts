@@ -6,6 +6,8 @@ import { stripe } from "@/lib/stripe";
 
 const settingsUrl = absoluteUrl("/settings");
 
+console.log("hello");
+
 export async function GET() {
   try {
     const user = await currentUser();
