@@ -1,6 +1,6 @@
 "use client";
 import * as z from "zod";
-import Heading from "@/components/heading";
+import Heading from "@/components/layout/heading";
 import {
   Select,
   SelectContent,
@@ -23,8 +23,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
-import { UserAvatar } from "@/components/user-avatar";
-import { BotAvatar } from "@/components/bot-avatar";
+import { UserAvatar } from "@/components/avatar/user-avatar";
+import { BotAvatar } from "@/components/avatar/bot-avatar";
 import { Card, CardFooter } from "@/components/ui/card";
 import toast from "react-hot-toast";
 interface ImageUrl {

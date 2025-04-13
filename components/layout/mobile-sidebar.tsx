@@ -9,7 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Sidebar from "@/components/sidebar";
+import Sidebar from "@/components/layout/sidebar";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface MobileSideBarProps {

@@ -5,13 +5,14 @@ import { FormProvider, useForm } from "react-hook-form";
 import formSchema from "@/app/(dashboard)/(routes)/conversation/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import Heading from "@/components/heading";
+import Heading from "@/components/layout/heading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
-import { UserAvatar } from "@/components/user-avatar";
-import { BotAvatar } from "@/components/bot-avatar";
+import { UserAvatar } from "@/components/avatar/user-avatar";
+import { BotAvatar } from "@/components/avatar/bot-avatar";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -40,7 +41,6 @@ const ConversationPage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      throw new Error("Everything is wrong ");
       form.clearErrors();
       setIsSubmitting(true);
       //User messages from client

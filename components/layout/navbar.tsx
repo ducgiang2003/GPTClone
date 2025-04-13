@@ -1,4 +1,4 @@
-import MobileSideBar from "@/components/mobile-sidebar";
+import MobileSideBar from "@/components/layout/mobile-sidebar";
 import { getApiLimitCount } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subsciption";
 

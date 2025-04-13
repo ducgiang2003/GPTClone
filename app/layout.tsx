@@ -10,10 +10,10 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
-import { ModalProvider } from "@/components/modal-provider";
-
+import { ModalProvider } from "@/components/modal/modal-provider";
 import { ToastProvider } from "@/components/toaster-provider";
 import { CrispProvider } from "@/components/crisp-chat-box/crisp-provider";
+import ThemeToggle from "@/components/layout/theme-toggle";
 const signInUrl = process.env.CLERK_SIGN_IN_FORCE_REDIRECT_URL;
 
 const geistSans = Geist({
@@ -42,7 +42,10 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <header className={"flex justify-end items-center p-4 h-4 gap-3"}>
+          <header
+            className={"flex flex-row justify-end items-center p-4 h-4 gap-3"}
+          >
+            <ThemeToggle />
             <SignedOut>
               <SignInButton forceRedirectUrl={signInUrl}>
                 <Button>Sign In</Button>

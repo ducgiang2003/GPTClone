@@ -1,4 +1,4 @@
-import Heading from "@/components/heading";
+import Heading from "@/components/layout/heading";
 import SubscriptionButton from "@/components/subscription-button";
 import { checkSubscription } from "@/lib/subsciption";
 import { Settings } from "lucide-react";
