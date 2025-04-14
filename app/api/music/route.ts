@@ -10,11 +10,11 @@ const replicate = new Replicate({
 
 export async function POST(req: NextRequest) {
   try {
-    // const { userId } = getAuth(req);
-    // if (!userId) {
-    //   return new NextResponse("Unauthorized", { status: 401 });
-    // }
-    // console.log("userID", userId);
+    const { userId } = getAuth(req);
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    console.log("userID", userId);
 
     const body = await req.json();
     const { prompts } = body;
@@ -24,41 +24,59 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    // // Check API limit
-    // const freeTrial = await checkApiLimit();
-    // const isPro = await checkSubscription();
+    console.log("prompt la ", prompts);
+    // Check API limit
+    const freeTrial = await checkApiLimit();
+    const isPro = await checkSubscription();
 
-    // if (!freeTrial && !isPro) {
-    //   return new NextResponse("Hết giới hạn sử dụng API ", { status: 403 });
-    // }
+    if (!freeTrial && !isPro) {
+      return new NextResponse("Hết giới hạn sử dụng API ", { status: 403 });
+    }
 
-    // //Increase API limit after success in API
-    // if (!isPro) {
-    //   await increaseApiLimit();
-    // }
+    //Increase API limit after success in API
+    if (!isPro) {
+      await increaseApiLimit();
+    }
 
-    // Trả về kết quả dưới dạng JSON
-    const response = await replicate.run(
-      "meta/musicgen:671ac645ce5e552cc63a54a2bbff63fcf798043055d2dac5fc9e36a837eedcfb",
-      {
-        input: {
-          top_k: 250,
-          top_p: 0,
-          prompt: prompts,
-          duration: 8,
-          temperature: 1,
-          continuation: false,
-          model_version: "stereo-large",
-          output_format: "mp3",
-          continuation_start: 0,
-          multi_band_diffusion: false,
-          normalization_strategy: "peak",
-          classifier_free_guidance: 3,
-        },
-      }
+    const input = {
+      prompt_b: prompts,
+    };
+
+    // output from Relicate will return a readable stream of audio
+    const output = await replicate.run(
+      "riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05",
+      { input }
     );
+    if (!output) {
+      return new NextResponse("No output from Replicate", { status: 500 });
+    }
 
-    return NextResponse.json(response);
+    // -> Need to trans ReadableStream to Buffer
+    // -> ReadableStream is a stream of data that can be read in chunks
+    // -> Buffer is a chunk of data that can be stored in memory
+
+    //Front-end will read blob file (buffer) and convert to audio file
+
+    //@ts-expect-error:Get data audio from output Replicate
+    const reader = output.audio.getReader();
+    if (!reader) {
+      return new NextResponse("No reader available", { status: 500 });
+    }
+    const chunks: Uint8Array[] = [];
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (value) chunks.push(value);
+    }
+
+    const response = Buffer.concat(chunks);
+    return new NextResponse(response, {
+      headers: {
+        "Content-Type": "audio/wav",
+        "Content-Disposition": "inline; filename=music.wav",
+      },
+    });
   } catch (error) {
     if (
       typeof error === "object" &&

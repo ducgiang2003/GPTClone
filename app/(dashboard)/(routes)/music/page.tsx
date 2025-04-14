@@ -11,8 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import toast from "react-hot-toast";
 import { Music } from "lucide-react";
 import { usePromodal } from "@/hooks/use-pro-modal";
@@ -35,12 +35,24 @@ const MusicPage = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       form.clearErrors();
-      setIsSubmitting(true);
-      setMusic(undefined);
-      const response = await axios.post("/api/music", values);
-      console.log("response la ", response);
-      setMusic(response.data.output);
 
+      setIsSubmitting(true);
+
+      setMusic(undefined);
+
+      const response = await axios.post("/api/music", values, {
+        responseType: "blob",
+      });
+
+      // Tạo URL từ blob
+      const audioUrl = URL.createObjectURL(response.data);
+
+      console.log("audioUrl", audioUrl);
+
+      // Lưu URL vào localStorage
+      localStorage.setItem("audioUrl", audioUrl);
+
+      setMusic(audioUrl);
       form.reset();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 403) {
@@ -55,9 +67,13 @@ const MusicPage = () => {
       router.refresh();
     }
   };
+
   useEffect(() => {
-    console.log("music debug", music);
-  });
+    const audioUrl = localStorage.getItem("audioUrl");
+    if (audioUrl) {
+      setMusic(audioUrl);
+    }
+  }, []);
 
   return (
     <div>
@@ -93,7 +109,7 @@ const MusicPage = () => {
                     <FormControl className={"m-0 p-0"}>
                       <Input
                         className={
-                          "border-0 outline-none " +
+                          "border-0 outline-none px-2 " +
                           // focus-visible make effect when type or not
                           "focus-visible:ring-0 " +
                           "focus-visible:ring-transparent"
@@ -132,7 +148,7 @@ const MusicPage = () => {
           <div className="flex flex-col gap-y-4">
             {music && (
               <audio controls className="w-full mt-8 ">
-                <source src={"music"} type="audio/wav" />
+                <source src={music} type="audio/wav" />
               </audio>
             )}
           </div>
