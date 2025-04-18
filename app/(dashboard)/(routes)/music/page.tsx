@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import toast from "react-hot-toast";
 import { Music } from "lucide-react";
@@ -67,13 +67,6 @@ const MusicPage = () => {
       router.refresh();
     }
   };
-
-  useEffect(() => {
-    const audioUrl = localStorage.getItem("audioUrl");
-    if (audioUrl) {
-      setMusic(audioUrl);
-    }
-  }, []);
 
   return (
     <div>

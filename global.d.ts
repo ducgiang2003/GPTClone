@@ -1,4 +1,4 @@
-interface MyCustomError{
-    message:string;
-    code:number;
+interface MyCustomError {
+  message: string;
+  code: number;
 }

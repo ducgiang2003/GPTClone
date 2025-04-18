@@ -1,20 +1,7 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Metadata } from "next";
 import "./globals.css";
-import { Button } from "@/components/ui/button";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
-import { ModalProvider } from "@/components/modal/modal-provider";
-import { ToastProvider } from "@/components/toaster-provider";
-import { CrispProvider } from "@/components/crisp-chat-box/crisp-provider";
-import ThemeToggle from "@/components/layout/theme-toggle";
-const signInUrl = process.env.CLERK_SIGN_IN_FORCE_REDIRECT_URL;
+import { Geist, Geist_Mono } from "next/font/google";
+import LayoutLanding from "./(landing)/layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,37 +20,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <header
-            className={"flex flex-row justify-end items-center p-4 h-4 gap-3"}
-          >
-            <ThemeToggle />
-            <SignedOut>
-              <SignInButton forceRedirectUrl={signInUrl}>
-                <Button>Sign In</Button>
-              </SignInButton>
-              <SignUpButton>
-                <Button>Sign Up</Button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </header>
-          <CrispProvider />
-          <ModalProvider />
-          <ToastProvider />
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <LayoutLanding>{children}</LayoutLanding>
+      </body>
+    </html>
   );
 }

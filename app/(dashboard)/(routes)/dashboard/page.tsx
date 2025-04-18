@@ -3,6 +3,7 @@ import {
   ArrowRight,
   Baby,
   BookImage,
+  Drum,
   MessageCircleMore,
   Video,
 } from "lucide-react";
@@ -31,6 +32,13 @@ const tools = [
     color: "text-orange-400",
     bgColor: "bg-orange-400/10",
     href: "/video",
+  },
+  {
+    label: "Music generation",
+    href: "/music",
+    icon: Drum,
+    color: "text-rose-600",
+    bgColor: "bg-rose-600/10",
   },
   {
     label: "Code",

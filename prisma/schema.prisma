@@ -5,6 +5,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
+//postgres:password@localhost:5432/postgres?schema=public"
+
 // This is your Prisma schema file.
 datasource db {
   provider = "postgresql"
