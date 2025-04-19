@@ -1,9 +1,8 @@
 "use client";
-
-import { SignUpButton, useAuth } from "@clerk/nextjs";
 import Link from "next/link";
+import { SignUpButton, useAuth } from "@clerk/nextjs";
 import TypewriterComponent from "typewriter-effect";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 const LandingContent = () => {
   const { isSignedIn } = useAuth();
   return (

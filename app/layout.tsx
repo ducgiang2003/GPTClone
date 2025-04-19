@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
-import LayoutLanding from "./(landing)/layout";
+import LandingPage from "./(landing)/layout";
+import AutoLogout from "@/components/auth/auto-logout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +27,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <LayoutLanding>{children}</LayoutLanding>
+        <LandingPage>{children}</LandingPage>
       </body>
     </html>
   );

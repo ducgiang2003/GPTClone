@@ -8,8 +8,8 @@ import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import Heading from "@/components/layout/heading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Empty } from "@/components/empty";
-import { Loader } from "@/components/loader";
+import { Empty } from "@/components/layout/empty";
+import { Loader } from "@/components/shared/loader";
 import { UserAvatar } from "@/components/avatar/user-avatar";
 import { BotAvatar } from "@/components/avatar/bot-avatar";
 
@@ -19,7 +19,7 @@ import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { Baby } from "lucide-react";
 import { usePromodal } from "@/hooks/use-pro-modal";
-import { FormattedText } from "@/components/formated-text";
+import { FormattedText } from "@/components/helper/formated-text";
 
 interface GeminiMessage {
   parts: { text: string }[];

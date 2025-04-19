@@ -5,7 +5,7 @@ import { Montserrat } from "next/font/google";
 //cn will use for customize by wrap css like cn(css)
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { FreeCounter } from "../freecounter";
+import { FreeCounter } from "../shared/freecounter";
 import { useRoutesStore } from "@/hooks/use-routes-store";
 
 const montserrat = Montserrat({

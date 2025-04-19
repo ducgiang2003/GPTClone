@@ -8,8 +8,8 @@ import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import Heading from "@/components/layout/heading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Empty } from "@/components/empty";
-import { Loader } from "@/components/loader";
+import { Empty } from "@/components/layout/empty";
+import { Loader } from "@/components/shared/loader";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -83,8 +83,8 @@ const VideoPage = () => {
         title={"Video Generation"}
         description={"Generate video from text "}
         icon={Video}
-        iconColor={"text-yellow-300"}
-        bgColor={"text-yellow-300/10"}
+        iconColor={"text-orange-600"}
+        bgColor={"text-orange-600/10"}
       />
       <div className={"px-4 lg:px-8"}>
         <div>

@@ -1,6 +1,5 @@
-import { Avatar, AvatarImage } from "./ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import Image from "next/image";
+import { Avatar, AvatarImage } from "../ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 const testimonials = [
   {
     name: "John Doe",
@@ -32,7 +31,7 @@ const testimonials = [
     content:
       "I was skeptical at first, but this AI tool exceeded my expectations. It's truly amazing!",
     image:
-      "https://c8.alamy.com/comp/PMBMDP/brian-griffin-family-guy-season-12-PMBMDP.jpg",
+      "https://preview.redd.it/a-pretentious-chill-guy-v0-5h4brk5ega2e1.jpeg?width=640&crop=smart&auto=webp&s=115448e36a020a55680abd71dd5c76fe91c3b4bb",
   },
   {
     name: "Tom Marvolo Riddle",

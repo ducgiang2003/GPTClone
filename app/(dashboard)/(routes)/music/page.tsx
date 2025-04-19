@@ -8,8 +8,8 @@ import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import Heading from "@/components/layout/heading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Empty } from "@/components/empty";
-import { Loader } from "@/components/loader";
+import { Empty } from "@/components/layout/empty";
+import { Loader } from "@/components/shared/loader";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
