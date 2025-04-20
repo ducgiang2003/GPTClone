@@ -9,8 +9,7 @@ import {
   SignUpButton,
 } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import ThemeToggle from "@/components/layout/theme-toggle"; // Theme toggle component
-
+import ThemeToggle from "@/components/layout/theme-toggle";
 import Link from "next/link";
 import LandingContent from "@/components/landing/landing-content";
 import LandingTestimonial from "@/components/landing/landing-testimonial";

@@ -23,7 +23,9 @@ const Sidebar = ({ apiLimitCounts = 0, isPro = false }: SidebarProps) => {
   return (
     <div
       className={
-        "space-y-4 py-4 flex flex-col h-full" + " bg-[#111827] text-white"
+        "space-y-4 py-4 flex flex-col h-full" +
+        " dark:bg-[#111827] dark:text-white" +
+        "bg-gray-700 text-zinc-900"
       }
     >
       <div className={"px-3 py-2 flex-1"}>
@@ -31,7 +33,12 @@ const Sidebar = ({ apiLimitCounts = 0, isPro = false }: SidebarProps) => {
           <div className={"relative w-8 h-8 mr-4"}>
             <Image fill alt={"logo"} src={"/logo.webp"} />
           </div>
-          <h1 className={cn("text-xl font-bold", montserrat.className)}>
+          <h1
+            className={cn(
+              "text-xl font-bold dark:text-white text-zinc-900",
+              montserrat.className
+            )}
+          >
             Super Ultra Genus
           </h1>
         </Link>
@@ -45,8 +52,8 @@ const Sidebar = ({ apiLimitCounts = 0, isPro = false }: SidebarProps) => {
                   "hover:text-white hover:bg-white/10 transition cursor-pointer rounded-xl",
                 // This will blur item in dashboard if you are not where the path
                 pathname === route.href
-                  ? "text-white bg-white/10 "
-                  : "text-zinc-600"
+                  ? "text-white  bg-white/10 "
+                  : "text-zinc-900 dark:text-white/80"
               )}
             >
               <div className={"flex items-center flex-1"}>

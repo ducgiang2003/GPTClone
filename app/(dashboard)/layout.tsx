@@ -3,15 +3,16 @@ import Sidebar from "@/components/layout/sidebar";
 import { getApiLimitCount } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subsciption";
 import { TimezoneSaver } from "@/components/services/time-zone-saver";
+import { UserButton } from "@clerk/nextjs";
+import Header from "@/components/auth/header";
 
- 
 const DashBoardLayout = async ({ children }: { children: React.ReactNode }) => {
   const apiLimitCounts = await getApiLimitCount();
   const isPro = await checkSubscription();
 
   return (
     <>
-      
+      <Header />
       <div className={"h-full relative"}>
         <TimezoneSaver />
         <div

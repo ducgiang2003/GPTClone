@@ -1,21 +1,24 @@
-"use client";
-
-import { useTheme } from "@/hooks/use-theme-store";
+import { useTheme } from "next-themes";
 import { Button } from "../ui/button";
+/// This component is used to toggle between light and dark themes
+/// It uses the `useTheme` hook from `next-themes` to manage the theme state
+const ThemeToggle = () => {
+  // Get the current theme and the function to set the theme from the `useTheme` hook
+  const { theme, setTheme } = useTheme();
 
-//Button to toggle between light and dark mode
-// This button will be used in the app to manage the theme state
-export default function ThemeToggle() {
-  const theme = useTheme((state) => state.theme);
-  const toggleTheme = useTheme((state) => state.toggleTheme);
   return (
-    <Button
-      onClick={toggleTheme}
-      className="px-4 py-2 rounded-md  transition-all duration-300
-                 bg-white dark:bg-gray-700 border-2
-                 hover:bg-gray-200 dark:hover:bg-gray-600"
-    >
-      {theme === "light" ? "☀️" : "🌙 "}
-    </Button>
+    <div>
+      {theme === "dark" ? (
+        <Button variant={"ghost"} onClick={() => setTheme("light")}>
+          🌙
+        </Button>
+      ) : (
+        <Button variant={"ghost"} onClick={() => setTheme("dark")}>
+          ☀️
+        </Button>
+      )}
+    </div>
   );
-}
+};
+
+export default ThemeToggle;
