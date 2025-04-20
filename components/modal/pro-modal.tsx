@@ -21,15 +21,19 @@ import axios from "axios";
 export const ProModal = () => {
   const tools = useRoutesStore((state) => state.routes);
   const proModal = usePromodal();
+
   const [loading, setLoading] = useState(false);
 
   const onSubscribe = async () => {
     try {
+      setLoading(true);
       const response = axios.get("/api/stripe");
       //Wait until open new url
       window.location.href = (await response).data.url;
     } catch (error) {
       console.error("Failed to STRIPE_CLIENT_ERROR:", error);
+    }finally{
+      setLoading(false);
     }
   };
   return (
