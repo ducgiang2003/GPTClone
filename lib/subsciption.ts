@@ -4,7 +4,7 @@ import prismadb from "./prismadb";
 
 const DAY_IN_MS = 86_400_400;
 
-export const checkSubscription = async (): Promise<Boolean> => {
+export const checkSubscription = async (): Promise<boolean> => {
   try {
     const user = await currentUser();
     if (!user) {
