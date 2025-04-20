@@ -4,15 +4,15 @@ import prismadb from "./prismadb";
 
 const DAY_IN_MS = 86_400_400;
 
-export const checkSubscription = async () => {
+export const checkSubscription = async (): Promise<Boolean> => {
   try {
     const user = await currentUser();
     if (!user) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return false;
     }
     const userId = user.id;
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return false;
     }
     const userSubscription = await prismadb.userSubscription.findUnique({
       where: {
@@ -36,6 +36,6 @@ export const checkSubscription = async () => {
     return !!isValid;
   } catch (error) {
     console.error("Error message:", error);
-    return new NextResponse(`Error in lib/subscription: }`, { status: 500 });
+    return false;
   }
 };
