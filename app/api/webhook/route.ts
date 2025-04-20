@@ -21,7 +21,6 @@ export async function POST(req: NextRequest) {
         signature,
         process.env.STRIPE_WEBHOOK_SECRET!
       );
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log("Error:", error.message);
       return new NextResponse("Webhook Error", { status: 400 });
