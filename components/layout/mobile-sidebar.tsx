@@ -20,16 +20,7 @@ const MobileSideBar = ({
   apiLimitCounts,
 }: MobileSideBarProps) => {
   // This is to prevent the hydration error in nextjs
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // This is to prevent the hydration error in nextjs
-  // because the sidebar is not mounted on the server side
-  if (!isMounted) {
-    return null;
-  }
+ 
 
   return (
     <Sheet>

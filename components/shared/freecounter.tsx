@@ -6,7 +6,9 @@ import { MAX_API_LIMITS } from "@/constants";
 import { Progress } from "../ui/progress";
 import { Button } from "../ui/button";
 import { Zap } from "lucide-react";
+import axios from "axios";
 import { usePromodal } from "@/hooks/use-pro-modal";
+import { ProModal } from "@/components/modal/pro-modal";
 
 interface FreeCounterProps {
   apiLimitCounts: number;
@@ -18,8 +20,8 @@ export const FreeCounter = ({
   isPro = false,
 }: FreeCounterProps) => {
   const [mounted, setMounted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const proModal = usePromodal();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -29,6 +31,15 @@ export const FreeCounter = ({
   if (isPro) {
     return null;
   }
+  const onSubscribe = async () => {
+    try {
+      const response = axios.get("/api/stripe");
+      //Wait until open new url
+      window.location.href = (await response).data.url;
+    } catch (error) {
+      console.error("Failed to STRIPE_CLIENT_ERROR:", error);
+    }
+  };
 
   return (
     <div className="px-3">
@@ -48,13 +59,17 @@ export const FreeCounter = ({
           </div>
           {/* Todo-modal open */}
           <Button
-            onClick={proModal.onOpen}
+            onClick={() => setIsModalOpen(true)}
             className="w-full "
             variant="premium"
           >
             Upgrade to Pro
             <Zap className="w-4 h-4 fill-white" />
           </Button>
+          <ProModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          />
         </CardContent>
       </Card>
     </div>

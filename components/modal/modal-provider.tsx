@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import { ProModal } from "./pro-modal";
 
 export const ModalProvider = () => {
-  const [mounted, setIsMounted] = useState(false);
+  // const [mounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  if (!mounted) {
-    return null;
-  }
+  // useEffect(() => {
+  //   setIsMounted(true);
+  //   console.log("Mounted", mounted);
+  // }, []);
+  // if (!mounted) {
+  //   return null;
+  // }
   return (
     <>
       <ProModal />

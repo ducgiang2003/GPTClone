@@ -9,16 +9,16 @@ import Heading from "@/components/layout/heading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/layout/empty";
+import { ProModal } from "@/components/modal/pro-modal";
 import { Loader } from "@/components/shared/loader";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import toast from "react-hot-toast";
 import { Video } from "lucide-react";
-import { usePromodal } from "@/hooks/use-pro-modal";
 
 const VideoPage = () => {
-  const proModal = usePromodal();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [video, setVideo] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -60,7 +60,7 @@ const VideoPage = () => {
       if (axios.isAxiosError(error) && error.response?.status === 403) {
         console.log("Hết giới hạn sử dụng API");
         //Todo-modal open
-        proModal.onOpen();
+        setIsModalOpen(true);
       } else {
         toast.error("Something went wrong, please try again later.");
       }
@@ -158,6 +158,10 @@ const VideoPage = () => {
               </video>
             )}
           </div>
+          <ProModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          />
         </div>
       </div>
     </div>

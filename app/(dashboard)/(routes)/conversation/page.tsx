@@ -12,22 +12,21 @@ import { Empty } from "@/components/layout/empty";
 import { Loader } from "@/components/shared/loader";
 import { UserAvatar } from "@/components/avatar/user-avatar";
 import { BotAvatar } from "@/components/avatar/bot-avatar";
-
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { ProModal } from "@/components/modal/pro-modal";
 import { Baby } from "lucide-react";
-import { usePromodal } from "@/hooks/use-pro-modal";
 import { FormattedText } from "@/components/helper/formated-text";
 
 interface GeminiMessage {
   parts: { text: string }[];
 }
 const ConversationPage = () => {
-  const proModal = usePromodal();
   const [messages, setMessages] = useState<GeminiMessage[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter();
   const form = useForm({
@@ -64,7 +63,7 @@ const ConversationPage = () => {
       if (axios.isAxiosError(error) && error.response?.status === 403) {
         console.log("Hết giới hạn sử dụng API");
         //Todo-modal open
-        proModal.onOpen();
+        setIsModalOpen(true);
       } else {
         toast.error("Something went wrong, please try again later.");
       }
@@ -149,17 +148,25 @@ const ConversationPage = () => {
               <div
                 key={index}
                 className={cn(
-                  "p-8 w-full rounded-lg flex items-start gap-x-8 ",
+                  "p-8 w-full rounded-lg flex items-start gap-x-8",
                   index % 2 === 0
-                    ? "bg-white border border-black/10"
+                    ? "bg-muted border border-black/10"
                     : "bg-muted"
                 )}
               >
-                {index % 2 === 0 ? <UserAvatar /> : <BotAvatar />}
+                <div className="min-w-[40px] mt-1">
+                  {index % 2 === 0 ? <UserAvatar /> : <BotAvatar />}
+                </div>
 
-                <FormattedText content={message.parts[0].text} />
+                <div className="flex-1 overflow-hidden">
+                  <FormattedText content={message.parts[0].text} />
+                </div>
               </div>
             ))}
+            <ProModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            />
           </div>
         </div>
       </div>

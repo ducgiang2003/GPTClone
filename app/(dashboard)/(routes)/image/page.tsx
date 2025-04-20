@@ -18,7 +18,6 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { amountOptions, formSchema, resolutionOptions } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePromodal } from "@/hooks/use-pro-modal";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/layout/empty";
@@ -26,6 +25,8 @@ import { Loader } from "@/components/shared/loader";
 import { UserAvatar } from "@/components/avatar/user-avatar";
 import { BotAvatar } from "@/components/avatar/bot-avatar";
 import { Card, CardFooter } from "@/components/ui/card";
+import { ProModal } from "@/components/modal/pro-modal";
+
 import toast from "react-hot-toast";
 interface ImageUrl {
   base64Images: string[];
@@ -33,7 +34,7 @@ interface ImageUrl {
 }
 
 const ImagePage = () => {
-  const proModal = usePromodal();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   //Khai báo state messages để lưu trữ các tin nhắn dưới dạng các object
   const [messages, setMessages] = useState<{ text: string }[]>([]);
@@ -59,8 +60,6 @@ const ImagePage = () => {
       const response = await axios.post<ImageUrl>("/api/images", values);
 
       if (response.data && Array.isArray(response.data.base64Images)) {
-        console.log("response message ", response.data.message);
-
         setMessages((prevMessages) => [
           ...prevMessages, // Giữ lại tin nhắn cũ
           { text: ` ${values.prompts}` },
@@ -83,7 +82,7 @@ const ImagePage = () => {
       if (axios.isAxiosError(error) && error.response?.status === 403) {
         console.log("Hết giới hạn sử dụng API");
         //Todo-modal open
-        proModal.onOpen();
+        setIsModalOpen(true);
       } else {
         toast.error("Something went wrong, please try again later.");
       }
@@ -263,6 +262,10 @@ const ImagePage = () => {
                 </CardFooter>
               </Card>
             ))}
+            <ProModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            />
           </div>
         </div>
       </div>
