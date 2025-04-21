@@ -20,7 +20,15 @@ const MobileSideBar = ({
   apiLimitCounts,
 }: MobileSideBarProps) => {
   // This is to prevent the hydration error in nextjs
- 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <Sheet>
@@ -33,7 +41,7 @@ const MobileSideBar = ({
         side={"left"}
         className="p-0 bg-gray-400 text-zinc-900
         dark:bg-[#111827] dark:text-white"
-      >
+      >P
         <SheetTitle className={"hidden"}></SheetTitle>
         <Sidebar apiLimitCounts={apiLimitCounts} isPro={isPro} />
       </SheetContent>

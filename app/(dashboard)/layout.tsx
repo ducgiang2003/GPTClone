@@ -1,12 +1,11 @@
-import Navbar from "@/components/layout/navbar";
 import Sidebar from "@/components/layout/sidebar";
 import { getApiLimitCount } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subsciption";
 import { TimezoneSaver } from "@/components/services/time-zone-saver";
-import { UserButton } from "@clerk/nextjs";
-import Header from "@/components/auth/header";
+import HeadingDashBoard from "@/components/layout/header-dashboard";
 import { ClerkProvider } from "@clerk/nextjs";
-import { ProModal } from "@/components/modal/pro-modal";
+import Navbar from "@/components/layout/navbar"
+
 
 const DashBoardLayout = async ({ children }: { children: React.ReactNode }) => {
   const apiLimitCounts = await getApiLimitCount();
@@ -14,7 +13,11 @@ const DashBoardLayout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <ClerkProvider>
-      <Header />
+      <div 
+      className="flex flex-row justify-between px-4 py-2  ">
+        <Navbar/>
+      <HeadingDashBoard />
+      </div>
       <div className={"h-full relative"}>
         <TimezoneSaver />
         <div
