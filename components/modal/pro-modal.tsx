@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Check, Zap } from "lucide-react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 interface ProModalProps {
   isOpen: boolean;
@@ -37,31 +38,43 @@ export const ProModal = ({ isOpen, onClose }: ProModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gray-200 w-full rounded-lg p-4">
+      <DialogContent
+        className="bg-gray-200 dark:bg-gray-800
+       w-full rounded-lg p-4"
+      >
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center flex-col gap-y-4 pb-2">
-            <div className="font-bold flex items-center gap-x-2 py-1">
+            <div className="font-bold flex  items-center gap-x-2 py-1">
               Upgrade to Pro
-              <Badge className="uppercase text-sm py-2 rounded-2xl font-bold" variant={"premium"}>
+              <Badge
+                className="uppercase text-sm py-2 rounded-2xl font-bold"
+                variant={"premium"}
+              >
                 Pro
               </Badge>
             </div>
           </DialogTitle>
           <DialogDescription asChild>
             <div className="text-center pt-2 space-y-2 font-medium text-zinc-900">
-              {tools.map((tool) => (
-                <Card
+              {tools.map((tool, index) => (
+                <motion.div
                   key={tool.label}
-                  className="p-3 items-center justify-between flex border-black/10 flex-row"
+                  initial={{ x: -50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.4, delay: index * 0.2 }}
                 >
-                  <div className="flex items-center gap-x-4">
-                    <div className={cn("p-2 w-fit rounded-md", tool.color)}>
-                      <tool.icon className="w-6 h-6" />
+                  <Card className="p-3 items-center justify-between flex border-black/10 flex-row">
+                    <div className="flex items-center gap-x-4">
+                      <div className={cn("p-2 w-fit rounded-md", tool.color)}>
+                        <tool.icon className="w-6 h-6" />
+                      </div>
+                      <div className="text-semibold text-sm font-bold">
+                        {tool.label}
+                      </div>
                     </div>
-                    <div className="text-semibold text-sm font-bold">{tool.label}</div>
-                  </div>
-                  <Check className="text-primary w-6 h-6" />
-                </Card>
+                    <Check className="text-primary w-6 h-6" />
+                  </Card>
+                </motion.div>
               ))}
             </div>
           </DialogDescription>

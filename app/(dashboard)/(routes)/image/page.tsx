@@ -21,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/layout/empty";
-import { Loader } from "@/components/shared/loader";
+import { Loader } from "@/components/shared/loading/loading-result";
 import { UserAvatar } from "@/components/avatar/user-avatar";
 import { BotAvatar } from "@/components/avatar/bot-avatar";
 import { Card, CardFooter } from "@/components/ui/card";

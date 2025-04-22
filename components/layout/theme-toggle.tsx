@@ -20,13 +20,17 @@ const ThemeToggle = () => {
   }
 
   return (
-    <div>
+    <div >
       {theme === "dark" ? (
-        <Button variant={"ghost"} onClick={() => setTheme("light")}>
+        <Button
+        className="cursor-pointer"
+         variant={"ghost"} onClick={() => setTheme("light")}>
           🌙
         </Button>
       ) : (
-        <Button variant={"ghost"} onClick={() => setTheme("dark")}>
+        <Button
+        className = "cursor-pointer"
+        variant={"ghost"} onClick={() => setTheme("dark")}>
           ☀️
         </Button>
       )}

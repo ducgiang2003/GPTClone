@@ -75,7 +75,7 @@ const DashBoard = () => {
               <div className={cn("p-2 w0fit rounded-md", tool.bgColor)}>
                 <tool.icon className={cn("w-8 h-8", tool.color)} />
               </div>
-              <div className="font-semibold">{tool.label}</div>
+              <div className="font-semibold ">{tool.label}</div>
             </div>
             <ArrowRight className="w-5 h-5" />
           </Card>

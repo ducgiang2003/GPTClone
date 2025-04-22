@@ -36,7 +36,7 @@ const LandingContent = () => {
             <Button
               variant={"premium"}
               className="md:text-lg p-4 md:p-6
-                      rounded-full font-semibold"
+                      rounded-full font-semibold cursor-pointer"
             >
               Start generating for free
             </Button>

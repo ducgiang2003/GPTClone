@@ -9,7 +9,7 @@ import Heading from "@/components/layout/heading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/layout/empty";
-import { Loader } from "@/components/shared/loader";
+import { Loader } from "@/components/shared/loading/loading-result";
 import { ProModal } from "@/components/modal/pro-modal";
 
 import { useRouter } from "next/navigation";

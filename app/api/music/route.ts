@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     }
 
     const input = {
-      prompt_b: prompts,
+      prompt_a: prompts,
     };
 
     // output from Relicate will return a readable stream of audio

@@ -53,7 +53,7 @@ export const FreeCounter = ({
               {apiLimitCounts} / {MAX_API_LIMITS} Free Counters
             </p>
             <Progress
-              className="h-3 rounded-md"
+              className="h-3 rounded-md bg-muted"
               value={(apiLimitCounts / MAX_API_LIMITS) * 100}
             />
           </div>

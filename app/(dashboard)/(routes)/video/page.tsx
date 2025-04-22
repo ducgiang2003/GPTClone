@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/layout/empty";
 import { ProModal } from "@/components/modal/pro-modal";
-import { Loader } from "@/components/shared/loader";
+import { Loader } from "@/components/shared/loading/loading-result";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

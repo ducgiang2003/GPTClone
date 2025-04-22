@@ -9,11 +9,11 @@ import Heading from "@/components/layout/heading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/layout/empty";
-import { Loader } from "@/components/shared/loader";
+import { Loader } from "@/components/shared/loading/loading-result";
 import { UserAvatar } from "@/components/avatar/user-avatar";
 import { BotAvatar } from "@/components/avatar/bot-avatar";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { ProModal } from "@/components/modal/pro-modal";
@@ -36,7 +36,12 @@ const ConversationPage = () => {
     },
   });
 
-  //IsLoading(default form)
+  //Scroll down if have have result
+  const messageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messageRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [messages]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -143,7 +148,7 @@ const ConversationPage = () => {
               <Empty label="No conversation started" />
             </div>
           )}
-          <div className="flex flex-col gap-y-4">
+          <div className="flex flex-col  gap-y-4">
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -167,6 +172,7 @@ const ConversationPage = () => {
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
             />
+            <div ref={messageRef} />
           </div>
         </div>
       </div>
