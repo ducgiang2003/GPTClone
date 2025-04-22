@@ -41,8 +41,9 @@ const Sidebar = ({ apiLimitCounts = 0, isPro = false }: SidebarProps) => {
           >
             Super Ultra Genus
           </h1>
-        </Link>
-        <div className={"space-y-1"}>
+        </Link >
+
+        <div className={"space-y-1 "}>
           {routes.map((route) => (
             <Link
               href={route.href}

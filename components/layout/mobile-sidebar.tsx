@@ -40,8 +40,8 @@ const MobileSideBar = ({
       <SheetContent
         side={"left"}
         className="p-0 bg-gray-400 text-zinc-900
-        dark:bg-[#111827] dark:text-white"
-      >P
+        dark:bg-[#111827] dark:text-white overflow-auto "
+      >
         <SheetTitle className={"hidden"}></SheetTitle>
         <Sidebar apiLimitCounts={apiLimitCounts} isPro={isPro} />
       </SheetContent>
