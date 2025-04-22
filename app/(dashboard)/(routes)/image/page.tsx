@@ -223,7 +223,7 @@ const ImagePage = () => {
                 className={cn(
                   "p-8 w-full rounded-lg flex items-start gap-x-8 ",
                   index % 2 === 0
-                    ? "bg-white border border-black/10"
+                    ? "bg-muted border border-black/10"
                     : "bg-muted"
                 )}
               >
