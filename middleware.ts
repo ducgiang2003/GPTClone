@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import redis from "./lib/redis";
 
 console.log("Middleware loaded", process.env.CLERK_REDIRECT_AFTER_SIGN_IN_URL);
 
@@ -8,6 +9,8 @@ const isProtectedRoute = createRouteMatcher([
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) await auth.protect();
 });
+
+ 
 
 export const config = {
   matcher: [

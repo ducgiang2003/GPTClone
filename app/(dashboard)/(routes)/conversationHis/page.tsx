@@ -43,7 +43,6 @@ const ConversationPage = () => {
     messageRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [messages]);
 
- 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       form.clearErrors();

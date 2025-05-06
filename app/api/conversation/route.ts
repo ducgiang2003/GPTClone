@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { Content, GoogleGenerativeAI } from "@google/generative-ai";
 import { increaseApiLimit, checkApiLimit } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subsciption";
+import axios from "axios";
+import redis from "@/lib/redis";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -39,7 +41,6 @@ export async function POST(req: NextRequest) {
         text: message.parts[0].text,
       })
     );
-    //Payload là phần dữ liệu gửi lên cho Gemini
     const geminiPayload = {
       contents: [{ parts: geminiParts }] as Content[],
     };
@@ -47,30 +48,43 @@ export async function POST(req: NextRequest) {
     // Gọi API Gemini
     const result = await model.generateContent(geminiPayload);
 
-    // Kiểm tra kết quả
     if (!result) {
       return new NextResponse("Failed to generate content.", { status: 500 });
     }
-    //Increase API limit after success in API
+    
     if (!isPro) {
       await increaseApiLimit();
     }
 
-    // Trả về kết quả dưới dạng JSON
+    //Reids key 
+    const redisKey = `chat_history_${userId}`;
+
     const response = await result.response;
+
+    //Save to RedisRedis
+    const aiMessage = {
+      message: response.text(),
+      messageType: "text",
+      senderId: "aiBot",
+      timestamp: new Date().toISOString(),
+    };
+
+    const userMessage = {
+      senderId:userId,
+      //Get last message from user
+      message: body.messages.at(-1)?.parts?.[0]?.text || "",
+      timestamp: new Date().toISOString(),
+      messageType: "text",
+    }
+
+    await redis.rpush(redisKey, JSON.stringify(aiMessage));
+    await redis.rpush(redisKey, JSON.stringify(userMessage));
+    await redis.expire(redisKey,86400);//1 day 
+
+   
     return NextResponse.json({ messages: response.text() });
   } catch (error) {
-    if (
-      typeof error === "object" &&
-      error !== null &&
-      "message" in error &&
-      "code" in error
-    ) {
-      const customError = error as MyCustomError;
-      return new NextResponse(`Error: ${customError.message}`, {
-        status: customError.code,
-      });
-    } else if (error instanceof Error) {
+   if (error instanceof Error) {
       console.error("Error message:", error.message);
       return new NextResponse(`Error: ${error.message}`, { status: 500 });
     } else {
