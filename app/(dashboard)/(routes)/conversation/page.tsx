@@ -19,6 +19,9 @@ import { cn } from "@/lib/utils";
 import { ProModal } from "@/components/modal/pro-modal";
 import { Baby } from "lucide-react";
 import { FormattedText } from "@/components/helper/formated-text";
+import { getCookie, setCookie } from "cookies-next";
+
+
 
 interface GeminiMessage {
   parts: { text: string }[];
@@ -27,6 +30,8 @@ const ConversationPage = () => {
   const [messages, setMessages] = useState<GeminiMessage[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [conversationId, setConversationId] = useState<string | null>(null); // State cho conversationId
 
   const router = useRouter();
   const form = useForm({
@@ -43,7 +48,23 @@ const ConversationPage = () => {
     messageRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [messages]);
 
- 
+  useEffect(() => {
+    const storedConversationId = getCookie("conversationId");
+    if (storedConversationId) {
+      setConversationId(storedConversationId as string);
+      console.log("Loaded conversationId from cookies:", storedConversationId);
+    }
+  }, [])
+
+  
+//Reset cookie when create new conversation
+  const handleCreateNewConversation = () => {
+    setMessages([]);
+    setConversationId(null); // Reset conversationId
+    setCookie("conversationId", "", { path: "/" }); // Clear the cookie
+    console.log("New conversation started, conversationId cleared.");
+  };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       form.clearErrors();
@@ -53,17 +74,30 @@ const ConversationPage = () => {
         parts: [{ text: values.prompts }],
       };
       const newMessages = [...messages, userMessage];
+      console.log("Current conversationId before sending:", conversationId); // Debug conversationId
 
+      
       const response = await axios.post("/api/conversation", {
         messages: newMessages,
+        conversationId,
       });
+      console.log("Received conversationId from API:", response.data.conversationId);
+
       //Message from Gemini
       const aiMessage: GeminiMessage = {
         parts: [{ text: response.data.messages }],
       };
 
       setMessages((current) => [...current, userMessage, aiMessage]);
+      if (!conversationId && response.data.conversationId) {
+        setCookie("conversationId", response.data.conversationId, {
+          maxAge:7*24*60*60,
+          path: "/",
+        });
+        setConversationId(response.data.conversationId);
+        console.log("New conversationId set:", response.data.conversationId); // Debug new conversationId
 
+      }
       form.reset();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 403) {
@@ -134,6 +168,13 @@ const ConversationPage = () => {
               </Button>
             </form>
           </FormProvider>
+          <Button
+                className={"col-span-12 lg:col-span-2 w-full"}
+                disabled={isSubmitting}
+                onClick={handleCreateNewConversation}
+              >
+               Create new conversation
+              </Button>
         </div>
         <div className="space-y-4 mt-4">
           {isSubmitting && (
@@ -181,3 +222,4 @@ const ConversationPage = () => {
   );
 };
 export default ConversationPage;
+

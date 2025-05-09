@@ -5,9 +5,12 @@ import { increaseApiLimit, checkApiLimit } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subsciption";
 import axios from "axios";
 import redis from "@/lib/redis";
+import { sendMessage } from "@/services/sendMessage";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+
+let conversationId: string | undefined = undefined;
 export async function POST(req: NextRequest) {
   try {
     const { userId } = getAuth(req);
@@ -76,13 +79,28 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
       messageType: "text",
     }
+    console.log("conversationId lay tu phia front end ", body.conversationId);
+    
+    const sendResult = await sendMessage(userMessage, aiMessage, conversationId);
+
+    // Update lại conversationId nếu chưa có
+    if (!conversationId && sendResult.conversationId) {
+      conversationId = sendResult.conversationId;
+      console.log("New conversationId created:", conversationId);
+    }
+    //Save to Redis     
 
     await redis.rpush(redisKey, JSON.stringify(aiMessage));
     await redis.rpush(redisKey, JSON.stringify(userMessage));
     await redis.expire(redisKey,86400);//1 day 
 
+
+  
+    console.log("conversation message ", response.text());
    
-    return NextResponse.json({ messages: response.text() });
+    return NextResponse.json({ 
+      messages: response.text(),
+      conversationId:conversationId });
   } catch (error) {
    if (error instanceof Error) {
       console.error("Error message:", error.message);
